@@ -1,0 +1,10 @@
+{
+  "name": "final-basic-flow",
+  "version": "1.0.0",
+  "description": "This is a demo of basic flow with three parties (issuer, holder and verifier) using Hyperledger Aries JS to create, transfer and verify a credential.",
+  "main": "index.js",
+  "repository": "https://github.com/sadityakumar9211/hyperledger-selection-task-demo",
+  "author": "Aditya Kumar Singh",
+  "license": "MIT",
+  "private": false
+}
