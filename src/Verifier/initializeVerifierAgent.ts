@@ -1,6 +1,5 @@
 import {
     Agent,
-    AutoAcceptCredential,
     AutoAcceptProof,
     HttpOutboundTransport,
     InitConfig,
@@ -8,6 +7,7 @@ import {
 } from "@aries-framework/core";
 import { agentDependencies, HttpInboundTransport } from "@aries-framework/node";
 import { getGenesisTransaction } from "../../utils/getGenesisTransaction";
+
 
 export const initializeVerifierAgent = async () => {
     const genesisTransactionsBCovrinTestNet = await getGenesisTransaction(

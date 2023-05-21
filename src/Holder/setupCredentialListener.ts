@@ -4,6 +4,7 @@ import {
     CredentialState,
     CredentialStateChangedEvent,
 } from "@aries-framework/core";
+const fs = require("fs");
 
 // setup credential listener - listens for received credentials
 export const setupCredentialListener = (holder: Agent) => {
@@ -17,6 +18,15 @@ export const setupCredentialListener = (holder: Agent) => {
                     await holder.credentials.acceptOffer({
                         credentialRecordId: payload.credentialRecord.id,
                     });
+
+                    // storing the credentialRecord connectionId for verification purposes.
+                    const connection = {
+                        id: payload.credentialRecord.connectionId,
+                    };
+                    fs.writeFileSync(
+                        "./connectionId.json",
+                        JSON.stringify(connection)
+                    );
                 case CredentialState.Done:
                     console.log(
                         `Credential for credential id ${payload.credentialRecord.id} is accepted`
