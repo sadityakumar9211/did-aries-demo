@@ -1,8 +1,4 @@
-// I will just import the functions and call the functions from here itself. (or maybe export the function from here)
-// initialize a holder
-// initialize the issuer
-// initiate a connection request and complete the connection by receiving the connection
-// issue a credential to the holder
+
 
 import {
     Agent,
@@ -24,6 +20,7 @@ import { createNewInvitation } from "./Issuer/createNewInvitation";
 import { setupConnectionListener } from "./Issuer/setupConnectionListener";
 import { receiveInvitation } from "./Holder/receiveInvitation";
 import { initializeVerifierAgent } from "./Verifier/initializeVerifierAgent";
+import { sleep } from "../utils/sleep";
 
 const fs = require("fs");
 require("dotenv").config();
@@ -63,16 +60,12 @@ const setupAndIssueCredential = async () => {
     setupConnectionListener(issuer, outOfBandRecord, flow(issuer));
     outOfBandId = outOfBandRecord?.id;
     await receiveInvitation(holder, invitationUrl);
+
+
     // console.log("Initializing the verifier...");
     // const verifier = await initializeVerifierAgent();
-
     // void (await sendProofRequest(verifier, issuer));
 };
-
-// Verification of Credentials
-// 1. Request for proof
-// 2. Receive of Request and Presentation of Proof
-// 3. Verify the proof
 
 const newProofAttribute = async () => {
     console.log("Creating new proof attribute for 'name'...");

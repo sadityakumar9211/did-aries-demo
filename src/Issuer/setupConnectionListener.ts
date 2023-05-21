@@ -22,10 +22,6 @@ export const setupConnectionListener = (
                 console.log(
                     `Connection for out-of-band id ${outOfBandRecord.id} completed`
                 );
-
-                // Custom business logic can be included here
-                // In this example we can send a basic message to the connection, but
-                // anything is possible
                 
                 console.log(payload.connectionRecord.id);
                 await cb(payload.connectionRecord.id);
