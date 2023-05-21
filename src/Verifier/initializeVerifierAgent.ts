@@ -1,6 +1,7 @@
 import {
     Agent,
     AutoAcceptCredential,
+    AutoAcceptProof,
     HttpOutboundTransport,
     InitConfig,
     WsOutboundTransport,
@@ -26,9 +27,10 @@ export const initializeVerifierAgent = async () => {
                 genesisTransactions: genesisTransactionsBCovrinTestNet,
             },
         ],
-        autoAcceptCredentials: AutoAcceptCredential.ContentApproved,
         autoAcceptConnections: true,
         endpoints: ["http://localhost:3003"],
+        autoAcceptProofs: AutoAcceptProof.ContentApproved,
+        connectToIndyLedgersOnStartup: true,
     };
 
     // A new instance of an agent is created here
@@ -36,7 +38,6 @@ export const initializeVerifierAgent = async () => {
 
     // Register a simple `WebSocket` outbound transport
     agent.registerOutboundTransport(new WsOutboundTransport());
-
 
     // Register a simple `Http` outbound transport
     agent.registerOutboundTransport(new HttpOutboundTransport());
