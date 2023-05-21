@@ -18,9 +18,9 @@ export const initializeIssuerAgent = async () => {
         label: "demo-agent-issuer",
         walletConfig: {
             id: "demo-agent-issuer",
-            key: "demoagentissuer00000000000000000",
+            key: process.env.ISSUER_WALLET_KEY!,
         },
-        publicDidSeed: "demoissuerdidseed000000000000002",
+        publicDidSeed: process.env.ISSUER_PUBLIC_SEED,
         indyLedgers: [
             {
                 id: "bcovrin-test-net",

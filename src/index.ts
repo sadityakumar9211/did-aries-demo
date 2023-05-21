@@ -13,7 +13,8 @@ import { issueCredential } from "./Issuer/issueCredential";
 import { setupCredentialListener } from "./Holder/setupCredentialListener";
 import { createNewInvitation } from "./Issuer/createNewInvitation";
 import { setupConnectionListener } from "./Issuer/setupConnectionListener";
-import { receiveInvitation } from "./holder/receiveInvitation";
+import { receiveInvitation } from "./Holder/receiveInvitation";
+require('dotenv').config()
 
 // flow of the issuing credential
 const flow = (issuer: Agent) => async (connectionId: string) => {
@@ -46,3 +47,13 @@ const setupAndIssueCredential = async () => {
 };
 
 void setupAndIssueCredential();
+
+
+
+// Verification of Credentials
+// 1. Request for proof
+// 2. Receive of Request and Presentation of Proof
+// 3. Verify the proof
+
+
+

@@ -19,7 +19,7 @@ export const initializeHolderAgent = async () => {
         label: "demo-agent-holder",
         walletConfig: {
             id: "demo-agent-holder",
-            key: "demoagentholder00000000000000000",
+            key: process.env.HOLDER_WALLET_KEY!,
         },
         indyLedgers: [
             {
