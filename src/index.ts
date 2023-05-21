@@ -4,7 +4,7 @@
 // initiate a connection request and complete the connection by receiving the connection
 // issue a credential to the holder
 
-import { Agent } from "@aries-framework/core";
+import { Agent, ProofExchangeRecord } from "@aries-framework/core";
 import { initializeHolderAgent } from "./Holder/initializeHolderAgent";
 import { initializeIssuerAgent } from "./Issuer/initializeIssuerAgent";
 import { registerSchema } from "./Issuer/registerSchema";
@@ -14,6 +14,7 @@ import { setupCredentialListener } from "./Holder/setupCredentialListener";
 import { createNewInvitation } from "./Issuer/createNewInvitation";
 import { setupConnectionListener } from "./Issuer/setupConnectionListener";
 import { receiveInvitation } from "./Holder/receiveInvitation";
+
 const fs = require("fs");
 require("dotenv").config();
 
@@ -30,7 +31,7 @@ const flow = (issuer: Agent) => async (connectionId: string) => {
     await issueCredential(issuer, credentialDefinition.id, connectionId);
 };
 
-let outOfBandId: string
+let outOfBandId: string;
 
 const setupAndIssueCredential = async () => {
     console.log("Initializing the holder...");
@@ -45,30 +46,24 @@ const setupAndIssueCredential = async () => {
     const { outOfBandRecord, invitationUrl } = await createNewInvitation(
         issuer
     );
-    outOfBandId = outOfBandRecord.id
+    outOfBandId = outOfBandRecord.id;
     setupConnectionListener(issuer, outOfBandRecord, flow(issuer));
     await receiveInvitation(holder, invitationUrl);
-};
 
-void setupAndIssueCredential();
+    void await sendProofRequest(issuer);
+    // void await acceptProofRequest(holder, ProofExchangeRecord) 
+    
+};
 
 // Verification of Credentials
 // 1. Request for proof
 // 2. Receive of Request and Presentation of Proof
 // 3. Verify the proof
 
-// indy: {
-//     credentialDefinitionId,
-//     attributes: [
-//         { name: "name", value: "Jane Doe" },
-//         { name: "age", value: "23" },
-//     ],
-// },
-
 const newProofAttribute = async () => {
     console.log("Creating new proof attribute for 'name'...");
     const credentialDefinition = JSON.parse(
-        fs.readFileSync("../credentialDefinition.json", "utf-8")
+        fs.readFileSync("./credentialDefinition.json", "utf-8")
     );
     const proofAttribute = {
         name: {
@@ -106,9 +101,9 @@ const sendProofRequest = async (issuer: Agent) => {
     const proofAttribute = await newProofAttribute();
     console.log("Requesting Proof...");
 
-    await issuer.proofs.requestProof({
+    const proofExchangeRecord = await issuer.proofs.requestProof({
         protocolVersion: "v2",
-        connectionId: connectionRecord.id,
+        connectionId: connectionRecord?.id,
         proofFormats: {
             indy: {
                 name: "proof-request",
@@ -117,4 +112,31 @@ const sendProofRequest = async (issuer: Agent) => {
             },
         },
     });
+
+    console.log({ proofExchangeRecord });
+    if (proofExchangeRecord.isVerified) {
+        console.log("The credentials are verified...");
+    } else if (proofExchangeRecord.state) {
+        console.log(proofExchangeRecord.state);
+    } else {
+        console.log(proofExchangeRecord.errorMessage);
+    }
 };
+
+const acceptProofRequest = async (
+    holder: Agent,
+    proofRecord: ProofExchangeRecord
+) => {
+    const requestedCredentials =
+        await holder.proofs.autoSelectCredentialsForProofRequest({
+            proofRecordId: proofRecord.id,
+        });
+
+    await holder.proofs.acceptRequest({
+        proofRecordId: proofRecord.id,
+        proofFormats: requestedCredentials.proofFormats,
+    });
+    console.log("Proof Request Accepted...");
+};
+
+void setupAndIssueCredential();
