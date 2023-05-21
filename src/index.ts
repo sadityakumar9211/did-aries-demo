@@ -4,7 +4,16 @@
 // initiate a connection request and complete the connection by receiving the connection
 // issue a credential to the holder
 
-import { Agent, ProofExchangeRecord } from "@aries-framework/core";
+import {
+    Agent,
+    AttributeFilter,
+    AutoAcceptProof,
+    ProofAttributeInfo,
+    ProofEventTypes,
+    ProofExchangeRecord,
+    ProofState,
+    ProofStateChangedEvent,
+} from "@aries-framework/core";
 import { initializeHolderAgent } from "./Holder/initializeHolderAgent";
 import { initializeIssuerAgent } from "./Issuer/initializeIssuerAgent";
 import { registerSchema } from "./Issuer/registerSchema";
@@ -14,9 +23,13 @@ import { setupCredentialListener } from "./Holder/setupCredentialListener";
 import { createNewInvitation } from "./Issuer/createNewInvitation";
 import { setupConnectionListener } from "./Issuer/setupConnectionListener";
 import { receiveInvitation } from "./Holder/receiveInvitation";
+import { initializeVerifierAgent } from "./Verifier/initializeVerifierAgent";
 
 const fs = require("fs");
 require("dotenv").config();
+
+
+let outOfBandId: string;
 
 // flow of the issuing credential
 const flow = (issuer: Agent) => async (connectionId: string) => {
@@ -31,7 +44,7 @@ const flow = (issuer: Agent) => async (connectionId: string) => {
     await issueCredential(issuer, credentialDefinition.id, connectionId);
 };
 
-let outOfBandId: string;
+
 
 const setupAndIssueCredential = async () => {
     console.log("Initializing the holder...");
@@ -41,18 +54,19 @@ const setupAndIssueCredential = async () => {
 
     console.log("Initializing the credential listener...");
     setupCredentialListener(holder);
+    proofRequestListener(holder);
 
     console.log("Initializing the connection...");
     const { outOfBandRecord, invitationUrl } = await createNewInvitation(
         issuer
     );
-    outOfBandId = outOfBandRecord.id;
     setupConnectionListener(issuer, outOfBandRecord, flow(issuer));
+    outOfBandId = outOfBandRecord?.id;
     await receiveInvitation(holder, invitationUrl);
+    // console.log("Initializing the verifier...");
+    // const verifier = await initializeVerifierAgent();
 
-    void await sendProofRequest(issuer);
-    // void await acceptProofRequest(holder, ProofExchangeRecord) 
-    
+    // void (await sendProofRequest(verifier, issuer));
 };
 
 // Verification of Credentials
@@ -65,17 +79,14 @@ const newProofAttribute = async () => {
     const credentialDefinition = JSON.parse(
         fs.readFileSync("./credentialDefinition.json", "utf-8")
     );
-    const proofAttribute = {
-        name: {
-            name: "name",
-            restrictions: [
-                {
-                    credentialDefinitionId:
-                        credentialDefinition?.credentialDefinitionId,
-                },
-            ],
-        },
-    };
+    const proofAttribute = new ProofAttributeInfo({
+        name: "name",
+        restrictions: [
+            new AttributeFilter({
+                credentialDefinitionId: credentialDefinition?.id,
+            }),
+        ],
+    });
 
     return proofAttribute;
 };
@@ -84,6 +95,8 @@ const getConnectionRecord = async (issuer: Agent) => {
     if (!outOfBandId) {
         console.error("Missing Connection Record...");
     }
+
+    //As there is only one connection to the issuer in this scenario
 
     const [connection] = await issuer.connections.findAllByOutOfBandId(
         outOfBandId
@@ -96,22 +109,29 @@ const getConnectionRecord = async (issuer: Agent) => {
     return connection;
 };
 
-const sendProofRequest = async (issuer: Agent) => {
+const sendProofRequest = async (verifier: Agent, issuer: Agent) => {
     const connectionRecord = await getConnectionRecord(issuer);
     const proofAttribute = await newProofAttribute();
     console.log("Requesting Proof...");
 
-    const proofExchangeRecord = await issuer.proofs.requestProof({
+    const attributes: Record<string, ProofAttributeInfo> = {};
+
+    attributes["attr_1"] = proofAttribute;
+    console.log("Just before requesting proof....")
+
+    const proofExchangeRecord = await verifier.proofs.requestProof({
         protocolVersion: "v2",
         connectionId: connectionRecord?.id,
         proofFormats: {
             indy: {
                 name: "proof-request",
                 version: "1.0",
-                requestedAttributes: proofAttribute,
+                requestedAttributes: attributes,
             },
         },
+        autoAcceptProof: AutoAcceptProof.ContentApproved,
     });
+    console.log("Just after requesting proof...")
 
     console.log({ proofExchangeRecord });
     if (proofExchangeRecord.isVerified) {
@@ -121,6 +141,20 @@ const sendProofRequest = async (issuer: Agent) => {
     } else {
         console.log(proofExchangeRecord.errorMessage);
     }
+};
+
+const proofRequestListener = (
+    holder: Agent /*, aliceInquirer: AliceInquirer */
+) => {
+    holder.events.on(
+        ProofEventTypes.ProofStateChanged,
+        async ({ payload }: ProofStateChangedEvent) => {
+            if (payload.proofRecord.state === ProofState.RequestReceived) {
+                console.log("Just before accepting Proof Request...")
+                await acceptProofRequest(holder, payload.proofRecord);
+            }
+        }
+    );
 };
 
 const acceptProofRequest = async (

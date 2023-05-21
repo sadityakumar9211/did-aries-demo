@@ -12,8 +12,8 @@ export const setupCredentialListener = (holder: Agent) => {
         async ({ payload }) => {
             switch (payload.credentialRecord.state) {
                 case CredentialState.OfferReceived:
-                    console.log("received a credential");
-                    // custom logic here
+                    console.log("Received a credential...");
+                    // Always accepting the credentials for this basic flow
                     await holder.credentials.acceptOffer({
                         credentialRecordId: payload.credentialRecord.id,
                     });
@@ -23,8 +23,6 @@ export const setupCredentialListener = (holder: Agent) => {
                     );
                     console.log("The received credential record is");
                     console.dir(payload.credentialRecord);
-                    // For demo purposes we exit the program here.
-                    process.exit(0);
             }
         }
     );

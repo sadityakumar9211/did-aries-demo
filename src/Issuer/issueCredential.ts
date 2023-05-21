@@ -7,7 +7,7 @@ export const issueCredential = async (
     connectionId: string
 ) =>
     issuer.credentials.offerCredential({
-        protocolVersion: "v1",
+        protocolVersion: "v2",
         connectionId,
         credentialFormats: {
             indy: {

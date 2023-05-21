@@ -12,8 +12,7 @@ export const initializeIssuerAgent = async () => {
     const genesisTransactionsBCovrinTestNet = await getGenesisTransaction(
         "http://test.bcovrin.vonx.io/genesis"
     );
-    // Simple agent configuration. This sets some basic fields like the wallet
-    // configuration and the label.
+    
     const config: InitConfig = {
         label: "demo-agent-issuer",
         walletConfig: {
