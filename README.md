@@ -1,5 +1,5 @@
 # Basic Flow of Decentralized Identity (DID)
-A basic flow with 3 parties (issuer, holder, and verifier) using Hyperledger Aries JS to create, transfer, and verify a credential.
+A basic flow with 3 parties (issuer, holder, and verifier) using Hyperledger Aries JS to create, transfer, and verify a credentials.
 
 ## Getting Started
 In this demo all three **Issuer**, **Holder**, and **Verifier** are in a [Node.js](https://nodejs.org) environment.
