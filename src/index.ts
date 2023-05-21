@@ -14,7 +14,8 @@ import { setupCredentialListener } from "./Holder/setupCredentialListener";
 import { createNewInvitation } from "./Issuer/createNewInvitation";
 import { setupConnectionListener } from "./Issuer/setupConnectionListener";
 import { receiveInvitation } from "./Holder/receiveInvitation";
-require('dotenv').config()
+const fs = require("fs");
+require("dotenv").config();
 
 // flow of the issuing credential
 const flow = (issuer: Agent) => async (connectionId: string) => {
@@ -29,6 +30,8 @@ const flow = (issuer: Agent) => async (connectionId: string) => {
     await issueCredential(issuer, credentialDefinition.id, connectionId);
 };
 
+let outOfBandId: string
+
 const setupAndIssueCredential = async () => {
     console.log("Initializing the holder...");
     const holder = await initializeHolderAgent();
@@ -42,18 +45,76 @@ const setupAndIssueCredential = async () => {
     const { outOfBandRecord, invitationUrl } = await createNewInvitation(
         issuer
     );
+    outOfBandId = outOfBandRecord.id
     setupConnectionListener(issuer, outOfBandRecord, flow(issuer));
     await receiveInvitation(holder, invitationUrl);
 };
 
 void setupAndIssueCredential();
 
-
-
 // Verification of Credentials
 // 1. Request for proof
 // 2. Receive of Request and Presentation of Proof
 // 3. Verify the proof
 
+// indy: {
+//     credentialDefinitionId,
+//     attributes: [
+//         { name: "name", value: "Jane Doe" },
+//         { name: "age", value: "23" },
+//     ],
+// },
 
+const newProofAttribute = async () => {
+    console.log("Creating new proof attribute for 'name'...");
+    const credentialDefinition = JSON.parse(
+        fs.readFileSync("../credentialDefinition.json", "utf-8")
+    );
+    const proofAttribute = {
+        name: {
+            name: "name",
+            restrictions: [
+                {
+                    credentialDefinitionId:
+                        credentialDefinition?.credentialDefinitionId,
+                },
+            ],
+        },
+    };
 
+    return proofAttribute;
+};
+
+const getConnectionRecord = async (issuer: Agent) => {
+    if (!outOfBandId) {
+        console.error("Missing Connection Record...");
+    }
+
+    const [connection] = await issuer.connections.findAllByOutOfBandId(
+        outOfBandId
+    );
+
+    if (!connection) {
+        console.error("Missing Connection Record...");
+    }
+
+    return connection;
+};
+
+const sendProofRequest = async (issuer: Agent) => {
+    const connectionRecord = await getConnectionRecord(issuer);
+    const proofAttribute = await newProofAttribute();
+    console.log("Requesting Proof...");
+
+    await issuer.proofs.requestProof({
+        protocolVersion: "v2",
+        connectionId: connectionRecord.id,
+        proofFormats: {
+            indy: {
+                name: "proof-request",
+                version: "1.0",
+                requestedAttributes: proofAttribute,
+            },
+        },
+    });
+};

@@ -21,6 +21,8 @@ export const setupCredentialListener = (holder: Agent) => {
                     console.log(
                         `Credential for credential id ${payload.credentialRecord.id} is accepted`
                     );
+                    console.log("The received credential record is");
+                    console.dir(payload.credentialRecord);
                     // For demo purposes we exit the program here.
                     process.exit(0);
             }
