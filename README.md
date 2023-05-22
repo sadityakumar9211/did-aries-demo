@@ -49,7 +49,7 @@ yarn issue
 yarn verify
 ```
 
-##### Output - Verifying Credentials
+<!-- ##### Output - Verifying Credentials -->
 
 
 
