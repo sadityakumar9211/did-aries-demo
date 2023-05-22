@@ -22,12 +22,6 @@ Once you're done with above steps you need to follow below steps: -
 ```
 yarn install
 ```
-- Install `ts-node` globally for JIT (Just in Time) compilation of TypeScript files, if you've not installed globally yet. 
-
-```
-yarn global add ts-node
-```
-
 
 ## Basic Flow
 > Note: Split the terminal into two side by side. 
