@@ -44,20 +44,11 @@ yarn issue
 <img src="https://github.com/sadityakumar9211/hyperledger-selection-task-demo/assets/78147198/777723cf-64eb-40ff-8326-7680dd647435" width="650" height="650"/>
 
 #### Verifying Credentials
-Since the issuer is the verifier so, we invoke the **sendProofRequest** just after issuing credentials. No new commands needed.
+- Use right terminal for verifying the credentials
 
-##### Output - Verifying Credentials
+```bash
+yarn verify
+```
+
+##### Output - Verifying Credentials: When issuer is the verifier
 <img src="https://github.com/sadityakumar9211/hyperledger-selection-task-demo/assets/78147198/21f0f8c3-f15c-4142-9219-9a588a54a81a" width="650" height="550"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
