@@ -16,6 +16,6 @@
     },
     "scripts": {
         "issue": "ts-node src/index.ts",
-        "verify": "ts-node src/verifyCredentials.ts"
+        "verify": "ts-node src/verify.ts"
     }
 }
