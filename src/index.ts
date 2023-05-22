@@ -29,9 +29,7 @@ const flow = (issuer: Agent) => async (connectionId: string) => {
     );
     console.log("Issuing the credential...");
     await issueCredential(issuer, credentialDefinition.id, connectionId);
-
-    console.log("Requesting Proof...");
-    await sendProofRequest(issuer);
+    console.log("Credential issued!");
 };
 
 const setupAndIssueCredential = async () => {
