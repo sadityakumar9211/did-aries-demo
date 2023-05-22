@@ -18,15 +18,6 @@ export const setupCredentialListener = (holder: Agent) => {
                     await holder.credentials.acceptOffer({
                         credentialRecordId: payload.credentialRecord.id,
                     });
-
-                    // // storing the credentialRecord connectionId for verification purposes.
-                    // const connection = {
-                    //     id: payload.credentialRecord.id,
-                    // };
-                    // fs.writeFileSync(
-                    //     "./connectionId.json",
-                    //     JSON.stringify(connection)
-                    // );
                 case CredentialState.Done:
                     console.log(
                         `Credential for credential id ${payload.credentialRecord.id} is accepted`

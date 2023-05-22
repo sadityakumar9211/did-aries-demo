@@ -13,10 +13,10 @@ import { setupConnectionListener } from "./Issuer/setupConnectionListener";
 import { receiveInvitation } from "./Holder/receiveInvitation";
 
 import { proofRequestListener } from "./Holder/proofRequestListener";
+import { sendProofRequest } from "./Verifier/sendProofRequest";
 
 const fs = require("fs");
 require("dotenv").config();
-
 
 // flow of the issuing credential
 const flow = (issuer: Agent) => async (connectionId: string) => {
@@ -29,6 +29,9 @@ const flow = (issuer: Agent) => async (connectionId: string) => {
     );
     console.log("Issuing the credential...");
     await issueCredential(issuer, credentialDefinition.id, connectionId);
+
+    console.log("Requesting Proof...");
+    await sendProofRequest(issuer);
 };
 
 const setupAndIssueCredential = async () => {
@@ -49,11 +52,8 @@ const setupAndIssueCredential = async () => {
     setupConnectionListener(issuer, outOfBandRecord, flow(issuer));
     await receiveInvitation(holder, invitationUrl);
 
-    
-
     // console.log("Initializing the verifier...");
     // const verifier = await initializeVerifierAgent();
-    // void (await sendProofRequest(verifier, issuer));
 };
 
 void setupAndIssueCredential();
