@@ -49,7 +49,7 @@ yarn issue
 ##### Output - Issued Credentials
 <img src="https://github.com/sadityakumar9211/hyperledger-selection-task-demo/assets/78147198/777723cf-64eb-40ff-8326-7680dd647435" width="550" height="550"/>
 
-#### Verifying Credentials: Request + Verify Proof 
+#### Verifying Credentials
 - Use right terminal for verifying the credentials
 ```bash
 yarn verify
