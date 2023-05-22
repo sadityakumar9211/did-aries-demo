@@ -49,7 +49,10 @@ yarn issue
 yarn verify
 ```
 
-<!-- ##### Output - Verifying Credentials -->
+##### Output - Verifying Credentials
+<img src="https://github.com/sadityakumar9211/hyperledger-selection-task-demo/assets/78147198/21f0f8c3-f15c-4142-9219-9a588a54a81a" width="550" height="550"/>
+
+
 
 
 
