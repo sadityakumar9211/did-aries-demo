@@ -4,12 +4,10 @@ import {
     ProofAttributeInfo,
 } from "@aries-framework/core";
 import { newProofAttribute } from "./newProofAttribute";
-const fs = require("fs");
+import { getConnectionRecord } from "./getConnectionRecord";
 
 export const sendProofRequest = async (verifier: Agent) => {
-    const connection = JSON.parse(
-        fs.readFileSync("./connectionId.json", "utf-8")
-    );
+    const connection = await getConnectionRecord();
 
     if (!connection.id) {
         console.log(

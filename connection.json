@@ -1,0 +1,23 @@
+{
+    "_tags": {
+        "outOfBandId": "5540f995-3888-4f80-b0e3-15d2921f97ef",
+        "theirDid": "did:peer:1zQmWDbYLaQDK2FihzGzDts1c31aBdSCrqGu1SpHu3rC1EFk",
+        "did": "did:peer:1zQmQFXLc58sCcYU4MeNm1xjt35Z52DGQpFHidsGVPLgeJy8",
+        "state": "completed",
+        "threadId": "731664bf-1e38-4331-95dc-d9ed02ec886e",
+        "role": "responder"
+    },
+    "metadata": {},
+    "connectionTypes": [],
+    "id": "818042b9-d402-4d70-90cb-7e737561eed6",
+    "createdAt": "2023-05-22T00:55:07.260Z",
+    "did": "did:peer:1zQmQFXLc58sCcYU4MeNm1xjt35Z52DGQpFHidsGVPLgeJy8",
+    "theirDid": "did:peer:1zQmWDbYLaQDK2FihzGzDts1c31aBdSCrqGu1SpHu3rC1EFk",
+    "theirLabel": "demo-agent-holder",
+    "state": "completed",
+    "role": "responder",
+    "autoAcceptConnection": true,
+    "threadId": "731664bf-1e38-4331-95dc-d9ed02ec886e",
+    "protocol": "https://didcomm.org/didexchange/1.0",
+    "outOfBandId": "5540f995-3888-4f80-b0e3-15d2921f97ef"
+}

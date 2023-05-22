@@ -25,13 +25,20 @@ export const setupConnectionListener = (
                 );
 
                 console.log(payload.connectionRecord.id);
-                // const connection = {
-                //     id: payload.connectionRecord.id,
-                // };
-                // fs.writeFileSync(
-                //     "./connectionId.json",
-                //     JSON.stringify(connection)
-                // );
+                
+                const [connection] =
+                    await issuer.connections.findAllByOutOfBandId(
+                        outOfBandRecord.id
+                    );
+
+                console.dir(connection);
+
+                await fs.writeFileSync(
+                    "./connection.json",
+                    JSON.stringify(connection)
+                );
+                console.log("Written connection successfully...")
+
                 await cb(payload.connectionRecord.id);
             }
         }

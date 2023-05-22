@@ -19,14 +19,14 @@ export const setupCredentialListener = (holder: Agent) => {
                         credentialRecordId: payload.credentialRecord.id,
                     });
 
-                    // storing the credentialRecord connectionId for verification purposes.
-                    const connection = {
-                        id: payload.credentialRecord.connectionId,
-                    };
-                    fs.writeFileSync(
-                        "./connectionId.json",
-                        JSON.stringify(connection)
-                    );
+                    // // storing the credentialRecord connectionId for verification purposes.
+                    // const connection = {
+                    //     id: payload.credentialRecord.id,
+                    // };
+                    // fs.writeFileSync(
+                    //     "./connectionId.json",
+                    //     JSON.stringify(connection)
+                    // );
                 case CredentialState.Done:
                     console.log(
                         `Credential for credential id ${payload.credentialRecord.id} is accepted`
