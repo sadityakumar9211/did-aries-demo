@@ -39,7 +39,7 @@ const setupAndIssueCredential = async () => {
     const issuer = await initializeIssuerAgent();
 
     console.log("Initializing the credential listener...");
-    setupCredentialListener(holder);
+    setupCredentialListener(holder, issuer);
     proofRequestListener(holder);
 
     console.log("Initializing the connection...");

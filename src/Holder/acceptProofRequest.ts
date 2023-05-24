@@ -9,9 +9,11 @@ export const acceptProofRequest = async (
             proofRecordId: proofRecord.id,
         });
 
-    await holder.proofs.acceptRequest({
+    const proofExchangeRecord = await holder.proofs.acceptRequest({
         proofRecordId: proofRecord.id,
         proofFormats: requestedCredentials.proofFormats,
     });
     console.log("Proof Request Accepted...");
+    // console.log({ proofExchangeRecord });
+    return proofExchangeRecord;
 };

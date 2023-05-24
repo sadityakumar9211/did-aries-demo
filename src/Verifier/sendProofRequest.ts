@@ -33,7 +33,7 @@ export const sendProofRequest = async (verifier: Agent) => {
                 requestedAttributes: attributes,
             },
         },
-        autoAcceptProof: AutoAcceptProof.ContentApproved,
+        autoAcceptProof: AutoAcceptProof.Always,
     });
     console.log("Just after requesting proof...");
 

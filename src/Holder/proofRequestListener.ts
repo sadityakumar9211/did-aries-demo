@@ -12,7 +12,8 @@ export const proofRequestListener = (holder: Agent) => {
         async ({ payload }: ProofStateChangedEvent) => {
             if (payload.proofRecord.state === ProofState.RequestReceived) {
                 console.log("Just before accepting Proof Request...");
-                await acceptProofRequest(holder, payload.proofRecord);
+                const proofExchangeRecord = await acceptProofRequest(holder, payload.proofRecord);
+                console.log(proofExchangeRecord)
             }
         }
     );
