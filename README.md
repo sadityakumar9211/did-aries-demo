@@ -45,9 +45,14 @@ yarn issue
 
 #### Verifying Credentials
 - Use right terminal for verifying the credentials
-
 ```bash
 yarn verify
+```
+
+> Currently, issuing and verification of credentials is done all with one command and is done in [this](https://github.com/sadityakumar9211/hyperledger-selection-task-demo/tree/all-in-one) branch. 
+
+```bash
+yarn issue
 ```
 
 ##### Output - Verifying Credentials: When issuer is the verifier
